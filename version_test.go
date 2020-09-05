@@ -29,6 +29,8 @@ func TestNewVersion(t *testing.T) {
 		{"v1.7rc2", false},
 		{"v1.0-", false},
 		{"2.28.0.618+gf4bc123cb7", false},
+		{"1.13.0+dev-545-gb3b1c081b", false},
+		{"2.28.0.618.gf4bc123cb7", false},
 		{"", true},
 		{"1.2.beta", true},
 		{"1.21.beta", true},
