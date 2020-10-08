@@ -34,6 +34,7 @@ func TestNewVersion(t *testing.T) {
 		{"1.7rc2", false},
 		{"v1.7rc2", false},
 		{"1.0-", false},
+		{"controller-v0.40.2", false},
 	}
 
 	for _, tc := range cases {
@@ -75,6 +76,7 @@ func TestNewSemver(t *testing.T) {
 		{"1.7rc2", true},
 		{"v1.7rc2", true},
 		{"1.0-", true},
+		{"controller-v0.40.2", false},
 	}
 
 	for _, tc := range cases {
@@ -110,6 +112,9 @@ func TestVersionCompare(t *testing.T) {
 		{"1.7rc2", "1.7rc1", 1},
 		{"1.7rc2", "1.7", -1},
 		{"1.2.0", "1.2.0-X-1.2.0+metadata~dist", 1},
+		{"controller-v0.40.2", "controller-v0.40.3", -1},
+		{"0.40.4", "controller-v0.40.2", 1},
+		{"0.40.4", "controller-v0.40.4", 0},
 	}
 
 	for _, tc := range cases {
