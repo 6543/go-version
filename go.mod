@@ -1,3 +1,1 @@
-module github.com/BESTSELLER/go-version
-
-go 1.15
+module github.com/hashicorp/go-version
