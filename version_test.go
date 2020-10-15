@@ -10,14 +10,10 @@ func TestNewVersion(t *testing.T) {
 		version string
 		err     bool
 	}{
-		{"2.29.0.rc0.261.g7178c9af9c", false},
-		{"", true},
+		// No Error
 		{"1.2.3", false},
 		{"1.0", false},
 		{"1", false},
-		{"1.2.beta", false},
-		{"1.21.beta", false},
-		{"foo", true},
 		{"1.2-5", false},
 		{"1.2-beta.5", false},
 		{"1.2.0-x.Y.0+metadata", false},
@@ -36,6 +32,12 @@ func TestNewVersion(t *testing.T) {
 		{"2.28.0.618+gf4bc123cb7", false},
 		{"1.13.0+dev-545-gb3b1c081b", false},
 		{"2.28.0.618.gf4bc123cb7", false},
+		{"2.29.0.rc0.261.g7178c9af9c", false},
+		{"1.2.beta", false},
+		{"1.21.beta", false},
+
+		// Have Error
+		{"", true},
 		{"\n1.2", true},
 		{"foo1.2.3", true},
 	}
