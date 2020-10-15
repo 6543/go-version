@@ -38,6 +38,7 @@ func TestNewVersion(t *testing.T) {
 
 		// Have Error
 		{"", true},
+		{"foo", true},
 		{"\n1.2", true},
 		{"foo1.2.3", true},
 	}
