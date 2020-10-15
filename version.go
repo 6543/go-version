@@ -20,8 +20,8 @@ var (
 const (
 	VersionRegexpRaw string = `[vV]?` + // Optional [vV] prefix
 		`([0-9]+(\.[0-9]+)*?)` + // ( MajorNum ( '.' MinorNums ) *? )
-		`(` + // Followed by (optionally): (
-		`(-[0-9]+[0-9A-Za-z\-~]*(\.[0-9A-Za-z\-~]+)*)` + // Either ( '-' PreNum String ( '.' OtherString ) * )
+		`(-` + // Followed by (optionally): ( '-'
+		`([0-9]+[0-9A-Za-z\-~]*(\.[0-9A-Za-z\-~]+)*)` + // Either ( PreNum String ( '.' OtherString ) * )
 		`|` +
 		`([\.-]?([A-Za-z\-~]+[0-9A-Za-z\-~]*(\.[0-9A-Za-z\-~]+)*)))?` + // Or ( ['-' '.' ] ? ( AlphaHyphenTilde String * ( '.' String ) *  ))) ?
 		`(\+([0-9A-Za-z\-~]+(\.[0-9A-Za-z\-~]+)*))?` + // and more Optionally: ( '+' String ( '.' String ) * )
