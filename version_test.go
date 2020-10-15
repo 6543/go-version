@@ -10,12 +10,13 @@ func TestNewVersion(t *testing.T) {
 		version string
 		err     bool
 	}{
+		{"2.29.0.rc0.261.g7178c9af9c", false},
 		{"", true},
 		{"1.2.3", false},
 		{"1.0", false},
 		{"1", false},
-		{"1.2.beta", true},
-		{"1.21.beta", true},
+		{"1.2.beta", false},
+		{"1.21.beta", false},
 		{"foo", true},
 		{"1.2-5", false},
 		{"1.2-beta.5", false},
