@@ -1,5 +1,5 @@
 # Versioning Library for Go
-[![Build Status](https://github.com/6543/go-version/workflows/Test/badge.svg?event=push)
+[![Build Status](https://github.com/6543/go-version/workflows/Test/badge.svg?event=release)
 [![GoDoc](https://godoc.org/github.com/6543/go-version?status.svg)](https://godoc.org/github.com/6543/go-version)
 
 go-version is a library for parsing versions and version constraints,
