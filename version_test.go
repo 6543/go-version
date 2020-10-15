@@ -20,7 +20,6 @@ func TestNewVersion(t *testing.T) {
 		{"foo", true},
 		{"1.2-5", false},
 		{"1.2-beta.5", false},
-		{"\n1.2", true},
 		{"1.2.0-x.Y.0+metadata", false},
 		{"1.2.0-x.Y.0+metadata-width-hypen", false},
 		{"1.2.3-rc1-with-hypen", false},
@@ -30,11 +29,15 @@ func TestNewVersion(t *testing.T) {
 		{"1.2.0-X-1.2.0+metadata~dist", false},
 		{"1.2.3.4-rc1-with-hypen", false},
 		{"1.2.3.4", false},
-		{"v1.2.3", false},
-		{"foo1.2.3", true},
+		{"V1.2.3", false},
 		{"1.7rc2", false},
 		{"v1.7rc2", false},
-		{"1.0-", false},
+		{"v1.0-", false},
+		{"2.28.0.618+gf4bc123cb7", false},
+		{"1.13.0+dev-545-gb3b1c081b", false},
+		{"2.28.0.618.gf4bc123cb7", false},
+		{"\n1.2", true},
+		{"foo1.2.3", true},
 	}
 
 	for _, tc := range cases {
@@ -52,16 +55,11 @@ func TestNewSemver(t *testing.T) {
 		version string
 		err     bool
 	}{
-		{"", true},
 		{"1.2.3", false},
 		{"1.0", false},
 		{"1", false},
-		{"1.2.beta", true},
-		{"1.21.beta", true},
-		{"foo", true},
 		{"1.2-5", false},
 		{"1.2-beta.5", false},
-		{"\n1.2", true},
 		{"1.2.0-x.Y.0+metadata", false},
 		{"1.2.0-x.Y.0+metadata-width-hypen", false},
 		{"1.2.3-rc1-with-hypen", false},
@@ -72,10 +70,15 @@ func TestNewSemver(t *testing.T) {
 		{"1.2.3.4-rc1-with-hypen", false},
 		{"1.2.3.4", false},
 		{"v1.2.3", false},
+		{"1.2.beta", true},
+		{"1.21.beta", true},
 		{"foo1.2.3", true},
 		{"1.7rc2", true},
+		{"\n1.2", true},
 		{"v1.7rc2", true},
 		{"1.0-", true},
+		{"", true},
+		{"foo", true},
 	}
 
 	for _, tc := range cases {
