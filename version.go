@@ -23,7 +23,7 @@ const (
 		`(-` + // Followed by (optionally): ( '-'
 		`([0-9]+[0-9A-Za-z\-~]*(\.[0-9A-Za-z\-~]+)*)` + // Either ( PreNum String ( '.' OtherString ) * )
 		`|` +
-		`([\.-]?([A-Za-z\-~]+[0-9A-Za-z\-~]*(\.[0-9A-Za-z\-~]+)*)))?` + // Or ( ['-' '.' ] ? ( AlphaHyphenTilde String * ( '.' String ) *  ))) ?
+		`([-\.]?([A-Za-z\-~]+[0-9A-Za-z\-~]*(\.[0-9A-Za-z\-~]+)*)))?` + // Or ( ['-' '.' ] ? ( AlphaHyphenTilde String * ( '.' String ) *  ))) ?
 		`(\+([0-9A-Za-z\-~]+(\.[0-9A-Za-z\-~]+)*))?` + // and more Optionally: ( '+' String ( '.' String ) * )
 		`([\+\.\-~]g[0-9A-Fa-f]{10}$)?` + // Optionally a: ( Punct 'g' Sha )
 		`?`
