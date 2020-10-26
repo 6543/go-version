@@ -47,6 +47,7 @@ func TestNewVersion(t *testing.T) {
 		{"v", true},
 		{"+metadata-width-hypen", true},
 		{"+metadata~dist", true},
+		{"-rc1-with-hypen", true},
 
 	}
 
