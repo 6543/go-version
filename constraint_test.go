@@ -15,8 +15,8 @@ func TestNewConstraint(t *testing.T) {
 		{">= 1.x", 1, false},
 		{">= 1.2, < 1.0", 2, false},
 
+		//{"-1.0", 1, true},?
 
-		{"-1.0", 1, true},
 		// Out of bounds
 		{"11387778780781445675529500000000000000000", 0, true},
 	}
