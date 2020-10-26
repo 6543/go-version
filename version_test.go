@@ -41,6 +41,13 @@ func TestNewVersion(t *testing.T) {
 		{"foo", true},
 		{"\n1.2", true},
 		{"foo1.2.3", true},
+		{"\n", true},
+		{".", true},
+		{"beta", true},
+		{"v", true},
+		{"+metadata-width-hypen", true},
+		{"+metadata~dist", true},
+
 	}
 
 	for _, tc := range cases {
