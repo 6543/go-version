@@ -643,3 +643,29 @@ func TestLessThanOrEqual(t *testing.T) {
 		}
 	}
 }
+
+func TestPurgeMeta(t *testing.T) {
+	v, err := NewVersion("1.13.0-rc1+dev-12-gcb171dbd5")
+	if err != nil {
+		t.Fatalf("err: %s", err)
+	}
+
+	v.PurgeMeta()
+
+	if v.String() != "1.13.0-rc1" {
+		t.Fatalf("Expect: %s, Got: %s", "1.13.0-rc1", v.String())
+	}
+}
+
+func TestPurgePre(t *testing.T) {
+	v, err := NewVersion("1.13.0-rc1+dev-12-gcb171dbd5")
+	if err != nil {
+		t.Fatalf("err: %s", err)
+	}
+
+	v.PurgePre()
+
+	if v.String() != "1.13.0+dev-12-gcb171dbd5" {
+		t.Fatalf("Expect: %s, Got: %s", "1.13.0+dev-12-gcb171dbd5", v.String())
+	}
+}

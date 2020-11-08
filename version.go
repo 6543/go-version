@@ -387,3 +387,13 @@ func (v *Version) String() string {
 func (v *Version) Original() string {
 	return v.original
 }
+
+// PurgeMeta remove metadata, original string is not touched
+func (v *Version) PurgeMeta() {
+	v.metadata = ""
+}
+
+// PurgePre remove pre-release information, original string is not touched
+func (v *Version) PurgePre() {
+	v.pre = ""
+}
