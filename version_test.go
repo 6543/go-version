@@ -644,7 +644,7 @@ func TestLessThanOrEqual(t *testing.T) {
 	}
 }
 
-func TestPurgeMeta(t *testing.T) {
+func TestRemoveMeta(t *testing.T) {
 	cases := []struct {
 		raw   string
 		clean string
@@ -686,7 +686,7 @@ func TestPurgeMeta(t *testing.T) {
 	}
 }
 
-func TestPurgePre(t *testing.T) {
+func TestRemovePre(t *testing.T) {
 	cases := []struct {
 		raw   string
 		clean string
