@@ -645,27 +645,85 @@ func TestLessThanOrEqual(t *testing.T) {
 }
 
 func TestPurgeMeta(t *testing.T) {
-	v, err := NewVersion("1.13.0-rc1+dev-12-gcb171dbd5")
-	if err != nil {
-		t.Fatalf("err: %s", err)
+	cases := []struct {
+		raw   string
+		clean string
+	}{
+		{"1.13.0+dev-12-gcb171dbd5", "1.13.0"},
+		{"1.13.0-rc1", "1.13.0-rc1"},
+		{"1.13.0-rc1+dev-12-gcb171dbd5", "1.13.0-rc1"},
+		{"1.1.4", "1.1.4"},
+		{"1.2", "1.2.0"},
+		{"1.2.0", "1.2.0"},
+		{"1.2.0-X-1.2.0+metadata~dist", "1.2.0-X-1.2.0"},
+		{"1.2.3", "1.2.3"},
+		{"1.2+beta", "1.2.0"},
+		{"1.2-beta", "1.2.0-beta"},
+		{"1.2+foo", "1.2.0"},
+		{"1.4.5", "1.4.5"},
+		{"1.7", "1.7.0"},
+		{"1.7rc1", "1.7.0-rc1"},
+		{"1.7rc2", "1.7.0-rc2"},
+		{"v1.2", "1.2.0"},
+		{"v1.2.0.0", "1.2.0.0"},
+		{"v1.2.0.0.1", "1.2.0.0.1"},
+		{"v1.2+beta", "1.2.0"},
+		{"v1.2-beta", "1.2.0-beta"},
+		{"v1.2+foo", "1.2.0"},
 	}
 
-	v.PurgeMeta()
+	for _, tc := range cases {
+		v, err := NewVersion(tc.raw)
+		if err != nil {
+			t.Fatalf("err: %s", err)
+		}
 
-	if v.String() != "1.13.0-rc1" {
-		t.Fatalf("Expect: %s, Got: %s", "1.13.0-rc1", v.String())
+		v.PurgeMeta()
+
+		if v.String() != tc.clean {
+			t.Fatalf("Expect: %s, Got: %s", tc.clean, v.String())
+		}
 	}
 }
 
 func TestPurgePre(t *testing.T) {
-	v, err := NewVersion("1.13.0-rc1+dev-12-gcb171dbd5")
-	if err != nil {
-		t.Fatalf("err: %s", err)
+	cases := []struct {
+		raw   string
+		clean string
+	}{
+		{"1.13.0+dev-12-gcb171dbd5", "1.13.0+dev-12-gcb171dbd5"},
+		{"1.13.0-rc1", "1.13.0"},
+		{"1.13.0-rc1+dev-12-gcb171dbd5", "1.13.0+dev-12-gcb171dbd5"},
+		{"1.1.4", "1.1.4"},
+		{"1.2", "1.2.0"},
+		{"1.2.0", "1.2.0"},
+		{"1.2.0-X-1.2.0+metadata~dist", "1.2.0+metadata~dist"},
+		{"1.2.3", "1.2.3"},
+		{"1.2+beta", "1.2.0+beta"},
+		{"1.2-beta", "1.2.0"},
+		{"1.2+foo", "1.2.0+foo"},
+		{"1.4.5", "1.4.5"},
+		{"1.7", "1.7.0"},
+		{"1.7rc1", "1.7.0"},
+		{"1.7rc2", "1.7.0"},
+		{"v1.2", "1.2.0"},
+		{"v1.2.0.0", "1.2.0.0"},
+		{"v1.2.0.0.1", "1.2.0.0.1"},
+		{"v1.2+beta", "1.2.0+beta"},
+		{"v1.2-beta", "1.2.0"},
+		{"v1.2+foo", "1.2.0+foo"},
 	}
 
-	v.PurgePre()
+	for _, tc := range cases {
+		v, err := NewVersion(tc.raw)
+		if err != nil {
+			t.Fatalf("err: %s", err)
+		}
 
-	if v.String() != "1.13.0+dev-12-gcb171dbd5" {
-		t.Fatalf("Expect: %s, Got: %s", "1.13.0+dev-12-gcb171dbd5", v.String())
+		v.PurgePre()
+
+		if v.String() != tc.clean {
+			t.Fatalf("Expect: %s, Got: %s", tc.clean, v.String())
+		}
 	}
 }
