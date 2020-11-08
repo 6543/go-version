@@ -678,7 +678,7 @@ func TestPurgeMeta(t *testing.T) {
 			t.Fatalf("err: %s", err)
 		}
 
-		v.PurgeMeta()
+		v.RemoveMeta()
 
 		if v.String() != tc.clean {
 			t.Fatalf("Expect: %s, Got: %s", tc.clean, v.String())
@@ -720,7 +720,7 @@ func TestPurgePre(t *testing.T) {
 			t.Fatalf("err: %s", err)
 		}
 
-		v.PurgePre()
+		v.RemovePre()
 
 		if v.String() != tc.clean {
 			t.Fatalf("Expect: %s, Got: %s", tc.clean, v.String())
