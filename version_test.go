@@ -10,16 +10,12 @@ func TestNewVersion(t *testing.T) {
 		version string
 		err     bool
 	}{
-		{"", true},
+		// No Error
 		{"1.2.3", false},
 		{"1.0", false},
 		{"1", false},
-		{"1.2.beta", true},
-		{"1.21.beta", true},
-		{"foo", true},
 		{"1.2-5", false},
 		{"1.2-beta.5", false},
-		{"\n1.2", true},
 		{"1.2.0-x.Y.0+metadata", false},
 		{"1.2.0-x.Y.0+metadata-width-hypen", false},
 		{"1.2.3-rc1-with-hypen", false},
@@ -29,13 +25,32 @@ func TestNewVersion(t *testing.T) {
 		{"1.2.0-X-1.2.0+metadata~dist", false},
 		{"1.2.3.4-rc1-with-hypen", false},
 		{"1.2.3.4", false},
-		{"v1.2.3", false},
-		{"foo1.2.3", true},
+		{"V1.2.3", false},
 		{"1.7rc2", false},
 		{"v1.7rc2", false},
-		{"1.0-", false},
+		{"v1.0-", false},
+		{"2.28.0.618+gf4bc123cb7", false},
+		{"1.13.0+dev-545-gb3b1c081b", false},
+		{"2.28.0.618.gf4bc123cb7", false},
+		{"2.29.0.rc0.261.g7178c9af9c", false},
+		{"1.2.beta", false},
+		{"1.21.beta", false},
+		{"v1.13.0-rc1", false},
 		{"controller-v0.40.2", false},
 		{"azure-cli-v1.4.2", false},
+
+		// Have Error
+		{"", true},
+		{"foo", true},
+		{"\n1.2", true},
+		{"foo1.2.3", true},
+		{"\n", true},
+		{".", true},
+		{"beta", true},
+		{"v", true},
+		{"+metadata-width-hypen", true},
+		{"+metadata~dist", true},
+		{"-rc1-with-hypen", true},
 	}
 
 	for _, tc := range cases {
@@ -53,16 +68,11 @@ func TestNewSemver(t *testing.T) {
 		version string
 		err     bool
 	}{
-		{"", true},
 		{"1.2.3", false},
 		{"1.0", false},
 		{"1", false},
-		{"1.2.beta", true},
-		{"1.21.beta", true},
-		{"foo", true},
 		{"1.2-5", false},
 		{"1.2-beta.5", false},
-		{"\n1.2", true},
 		{"1.2.0-x.Y.0+metadata", false},
 		{"1.2.0-x.Y.0+metadata-width-hypen", false},
 		{"1.2.3-rc1-with-hypen", false},
@@ -73,12 +83,17 @@ func TestNewSemver(t *testing.T) {
 		{"1.2.3.4-rc1-with-hypen", false},
 		{"1.2.3.4", false},
 		{"v1.2.3", false},
-		{"foo1.2.3", true},
-		{"1.7rc2", true},
-		{"v1.7rc2", true},
-		{"1.0-", true},
 		{"controller-v0.40.2", false},
 		{"azure-cli-v1.4.2", false},
+		{"1.2.beta", true},
+		{"1.21.beta", true},
+		{"foo1.2.3", true},
+		{"1.7rc2", true},
+		{"\n1.2", true},
+		{"v1.7rc2", true},
+		{"1.0-", true},
+		{"", true},
+		{"foo", true},
 	}
 
 	for _, tc := range cases {
@@ -113,6 +128,8 @@ func TestVersionCompare(t *testing.T) {
 		{"v1.2.3.0", "v1.2.3.4", -1},
 		{"1.7rc2", "1.7rc1", 1},
 		{"1.7rc2", "1.7", -1},
+		{"2.29.0.rc0.261.g7178c9af9c", "2.29.0", -1},
+		{"2.29.0.rc0.261.g7178c9af9c", "2.29.0-rc1", -1},
 		{"1.2.0", "1.2.0-X-1.2.0+metadata~dist", 1},
 		{"controller-v0.40.2", "controller-v0.40.3", -1},
 		{"0.40.4", "controller-v0.40.2", 1},
@@ -216,10 +233,14 @@ func TestComparePreReleases(t *testing.T) {
 	}{
 		{"1.2-beta.2", "1.2-beta.2", 0},
 		{"1.2-beta.1", "1.2-beta.2", -1},
+		{"1.2.beta.1", "1.2-beta.2", -1},
 		{"1.2-beta.2", "1.2-beta.11", -1},
 		{"3.2-alpha.1", "3.2-alpha", 1},
+		{"3.2.alpha.1", "3.2-alpha", 1},
 		{"1.2-beta.2", "1.2-beta.1", 1},
 		{"1.2-beta.11", "1.2-beta.2", 1},
+		{"1.2.beta.11", "1.2-beta.2", 1},
+		{"1.2-beta.11", "1.2.beta.2", 1},
 		{"1.2-beta", "1.2-beta.3", -1},
 		{"1.2-alpha", "1.2-beta.3", -1},
 		{"1.2-beta", "1.2-alpha.3", 1},
@@ -629,6 +650,90 @@ func TestLessThanOrEqual(t *testing.T) {
 				"%s <= %s\nexpected: %t\nactual: %t",
 				tc.v1, tc.v2,
 				expected, actual)
+		}
+	}
+}
+
+func TestRemoveMeta(t *testing.T) {
+	cases := []struct {
+		raw   string
+		clean string
+	}{
+		{"1.13.0+dev-12-gcb171dbd5", "1.13.0"},
+		{"1.13.0-rc1", "1.13.0-rc1"},
+		{"1.13.0-rc1+dev-12-gcb171dbd5", "1.13.0-rc1"},
+		{"1.1.4", "1.1.4"},
+		{"1.2", "1.2.0"},
+		{"1.2.0", "1.2.0"},
+		{"1.2.0-X-1.2.0+metadata~dist", "1.2.0-X-1.2.0"},
+		{"1.2.3", "1.2.3"},
+		{"1.2+beta", "1.2.0"},
+		{"1.2-beta", "1.2.0-beta"},
+		{"1.2+foo", "1.2.0"},
+		{"1.4.5", "1.4.5"},
+		{"1.7", "1.7.0"},
+		{"1.7rc1", "1.7.0-rc1"},
+		{"1.7rc2", "1.7.0-rc2"},
+		{"v1.2", "1.2.0"},
+		{"v1.2.0.0", "1.2.0.0"},
+		{"v1.2.0.0.1", "1.2.0.0.1"},
+		{"v1.2+beta", "1.2.0"},
+		{"v1.2-beta", "1.2.0-beta"},
+		{"v1.2+foo", "1.2.0"},
+	}
+
+	for _, tc := range cases {
+		v, err := NewVersion(tc.raw)
+		if err != nil {
+			t.Fatalf("err: %s", err)
+		}
+
+		v.RemoveMeta()
+
+		if v.String() != tc.clean {
+			t.Fatalf("Expect: %s, Got: %s", tc.clean, v.String())
+		}
+	}
+}
+
+func TestRemovePre(t *testing.T) {
+	cases := []struct {
+		raw   string
+		clean string
+	}{
+		{"1.13.0+dev-12-gcb171dbd5", "1.13.0+dev-12-gcb171dbd5"},
+		{"1.13.0-rc1", "1.13.0"},
+		{"1.13.0-rc1+dev-12-gcb171dbd5", "1.13.0+dev-12-gcb171dbd5"},
+		{"1.1.4", "1.1.4"},
+		{"1.2", "1.2.0"},
+		{"1.2.0", "1.2.0"},
+		{"1.2.0-X-1.2.0+metadata~dist", "1.2.0+metadata~dist"},
+		{"1.2.3", "1.2.3"},
+		{"1.2+beta", "1.2.0+beta"},
+		{"1.2-beta", "1.2.0"},
+		{"1.2+foo", "1.2.0+foo"},
+		{"1.4.5", "1.4.5"},
+		{"1.7", "1.7.0"},
+		{"1.7rc1", "1.7.0"},
+		{"1.7rc2", "1.7.0"},
+		{"v1.2", "1.2.0"},
+		{"v1.2.0.0", "1.2.0.0"},
+		{"v1.2.0.0.1", "1.2.0.0.1"},
+		{"v1.2+beta", "1.2.0+beta"},
+		{"v1.2-beta", "1.2.0"},
+		{"v1.2+foo", "1.2.0+foo"},
+	}
+
+	for _, tc := range cases {
+		v, err := NewVersion(tc.raw)
+		if err != nil {
+			t.Fatalf("err: %s", err)
+		}
+
+		v.RemovePre()
+
+		if v.String() != tc.clean {
+			t.Fatalf("Expect: %s, Got: %s", tc.clean, v.String())
 		}
 	}
 }
