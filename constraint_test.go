@@ -87,18 +87,22 @@ func TestConstraintCheck(t *testing.T) {
 		{"~1.1", "1.2.3", false},
 		{"~1.1.2", "1.1.1", false},
 		{"~1.1.2", "1.1.2", true},
+		{"~1.1.2", "1.1.2.5", true},
 		{"~1.1.2", "1.1.2.3", true},
 		{"^1.0.0", "1.0.0", true},
 		{"^1.0.0", "1.0.1", true},
 		{"^1.0.0", "1.9.1", true},
 		{"^1.0.0", "2.0.0", false},
 		{"^0.1.0", "0.1.0", true},
-		{"^0.1.0", "0.2.0", false},
+		{"^0.1.0", "0.2.0", true},
+		{"^0.1.0", "0.3.0", true},
 		{"^0.1.0", "0.1.4", true},
 		{"^0.0.1", "0.0.0", false},
 		{"^0.0.1", "0.0.1", true},
-		{"^0.0.1", "0.0.2", false},
-		{"^0.0.1", "0.2.0", false},
+		{"^0.0.1", "0.0.2", true},
+		{"^0.0.1", "0.2.0", true},
+		{"^1.2.3", "1.99.99", true},
+		{"^1.2.3", "2.00.00", false},
 		{"~1.0.0", "1.0.0", true},
 		{"~1.0.0", "1.0.1", true},
 		{"~1.0.0", "1.9.1", false},
@@ -108,7 +112,7 @@ func TestConstraintCheck(t *testing.T) {
 		{"~0.1.0", "0.1.4", true},
 		{"~0.0.1", "0.0.0", false},
 		{"~0.0.1", "0.0.1", true},
-		{"~0.0.1", "0.0.2", false},
+		{"~0.0.1", "0.0.2", true},
 		{"~0.0.1", "0.2.0", false},
 	}
 
@@ -126,7 +130,7 @@ func TestConstraintCheck(t *testing.T) {
 		actual := c.Check(v)
 		expected := tc.check
 		if actual != expected {
-			t.Fatalf("Version: %s\nConstraint: %s\nExpected: %#v",
+			t.Fatalf("\nVersion: %s\nConstraint: %s\nExpected: %#v",
 				tc.version, tc.constraint, expected)
 		}
 	}
