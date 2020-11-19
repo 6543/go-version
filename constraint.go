@@ -221,7 +221,7 @@ func constraintTilde(v, c *Version) bool {
 		return false
 	}
 
-	if v.segments[1] != c.segments[1] && c.si > 1 {
+	if c.si > 1 && v.segments[1] != c.segments[1] {
 		return false
 	}
 
