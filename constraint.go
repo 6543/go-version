@@ -35,6 +35,8 @@ func init() {
 		">=": constraintGreaterThanEqual,
 		"<=": constraintLessThanEqual,
 		"~>": constraintPessimistic,
+		"^":  constraintCaret,
+		"~":  constraintTilde,
 	}
 
 	ops := make([]string, 0, len(constraintOperators))
@@ -196,4 +198,32 @@ func constraintPessimistic(v, c *Version) bool {
 	// this index is less than the constraints segment at this index, then it cannot
 	// be valid against the constraint
 	return c.segments[cs-1] <= v.segments[cs-1]
+}
+
+func constraintCaret(v, c *Version) bool {
+	if !prereleaseCheck(v, c) || v.LessThan(c) {
+		return false
+	}
+
+	if v.segments[0] != c.segments[0] {
+		return false
+	}
+
+	return true
+}
+
+func constraintTilde(v, c *Version) bool {
+	if !prereleaseCheck(v, c) || v.LessThan(c) {
+		return false
+	}
+
+	if v.segments[0] != c.segments[0] {
+		return false
+	}
+
+	if c.si > 1 && v.segments[1] != c.segments[1] {
+		return false
+	}
+
+	return true
 }
