@@ -148,9 +148,8 @@ func (v *Version) Compare(other *Version) int {
 
 		if comp := comparePrereleases(preSelf, preOther); comp != 0 {
 			return comp
-		} else {
-			return strings.Compare(v.metadata, other.metadata)
 		}
+		return strings.Compare(v.metadata, other.metadata)
 	}
 
 	// Get the highest specificity (hS), or if they're equal, just use segmentSelf length
