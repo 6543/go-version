@@ -369,6 +369,8 @@ func TestVersionSegments(t *testing.T) {
 		version  string
 		expected []int
 	}{
+		{"1", []int{1, 0, 0}},
+		{"1.2", []int{1, 2, 0}},
 		{"1.2.3", []int{1, 2, 3}},
 		{"1.2-beta", []int{1, 2, 0}},
 		{"1-x.Y.0", []int{1, 0, 0}},
