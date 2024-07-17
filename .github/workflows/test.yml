@@ -5,9 +5,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v5
         with:
-          go-version: 1.15.x
+          go-version: 1.18.x
       - name: Checkout code
         uses: actions/checkout@v2
       - name: vet
@@ -20,16 +20,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@v2
-        with:
-          version: v1.31
+        uses: golangci/golangci-lint-action@v6
 
   test:
     strategy:
       matrix:
-        go-version: [ 1.10.x, 1.15.x ]
+        go-version: [ 1.18.x, 1.22.x ]
         os: [ ubuntu-latest, macos-latest, windows-latest ]
     runs-on: ${{ matrix.os }}
     steps:

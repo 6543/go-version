@@ -1,3 +1,8 @@
+// SPDX-License-Identifier: MPL-2.0
+
+// Package version provides functionality for parsing and comparing version strings.
+// It supports semantic versioning and includes methods for version comparison,
+// manipulation, and formatting.
 package version
 
 import (
@@ -141,7 +146,10 @@ func (v *Version) Compare(other *Version) int {
 			return -1
 		}
 
-		return comparePrereleases(preSelf, preOther)
+		if comp := comparePrereleases(preSelf, preOther); comp != 0 {
+			return comp
+		}
+		return strings.Compare(v.metadata, other.metadata)
 	}
 
 	// Get the highest specificity (hS), or if they're equal, just use segmentSelf length
