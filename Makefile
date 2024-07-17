@@ -36,13 +36,11 @@ vet:
 
 .PHONY: revive
 revive:
-	$(GO) get -u github.com/mgechev/revive; \
-	revive -config .revive.toml || exit 1
+	$(GO) run github.com/mgechev/revive@latest -config .revive.toml || exit 1
 
 .PHONY: misspell
 misspell-check:
-	$(GO) get -u github.com/client9/misspell/cmd/misspell; \
-	misspell -error -i unknwon,destory $(GO_SOURCES)
+	$(GO) run github.com/client9/misspell/cmd/misspell@latest -error -i unknwon,destory $(GO_SOURCES)
 
 .PHONY: test
 test:
