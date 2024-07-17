@@ -1,3 +1,8 @@
+// SPDX-License-Identifier: MPL-2.0
+
+// Package version provides functionality for parsing and comparing version strings.
+// It supports semantic versioning and includes methods for version comparison,
+// manipulation, and formatting.
 package version
 
 import (
